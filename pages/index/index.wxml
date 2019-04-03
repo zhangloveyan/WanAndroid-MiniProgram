@@ -1,0 +1,14 @@
+<!--index.wxml-->
+<scroll-view class='article-scroll'>
+  <block wx:for="{{articleList}}" wx:key="{{index}}">
+    <text class='article-niceDate'>{{item.niceDate}}</text>
+    <view class='card' data-data="{{item}}" bindtap='articleClick' >
+      <text class='article-title'>{{item.title}}</text>
+      <view>
+        <text class='article-chapter'>分类：{{item.superChapterName}}-{{item.chapterName}}</text>
+      <text class='article-zan'>{{item.zan}}赞</text>
+      </view>
+    </view>
+
+  </block>
+</scroll-view>

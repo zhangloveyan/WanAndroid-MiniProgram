@@ -1,0 +1,3 @@
+<!--pages/detail.wxml-->
+<!-- <text>"{{detail}}"</text> -->
+<wxparser rich-text="{{richText}}" />
