@@ -33,6 +33,11 @@ Page({
           articleList: localList
         })
         wx.hideLoading()
+      },
+      fail:function(){
+        wx.showToast({
+          title: '网络请求异常',
+        })
       }
     })
   },

@@ -1,7 +1,9 @@
 <!--pages/detail.wxml-->
-<import src="../../wxParser/index.wxml"/>
-<view class="wxParser">
-  <template is="wxParser" data="{{wxParserData:richText.nodes}}"/>
+<import src="../../wxParser/index.wxml" />
+<view class='background'>
+  <view class="wxParser">
+    <template is="wxParser" data="{{wxParserData:richText.nodes}}" />
+  </view>
 </view>
 <!-- <text>"{{detail}}"</text> -->
 <!-- <wxparser rich-text="{{richText}}" /> -->

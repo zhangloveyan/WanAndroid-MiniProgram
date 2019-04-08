@@ -22,7 +22,7 @@ const removeDOCTYPE = (str) => {
  */
 const html2json = (html, bindName) => {
   html = removeDOCTYPE(html);
-
+  
   // 节点缓冲区，与 htmlparser.js 中的 stack 对应，只存储非自闭和标签
   // 比如 <span></span>，而非 <img src="#"> 等
   let bufferNodes = [];

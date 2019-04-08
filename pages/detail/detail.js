@@ -13,12 +13,16 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function(options) {
-    // http://www.jianshu.com/p/23cf3199f606
     // https://www.jianshu.com/p/f14de0935c38
 
     var url = options.url
+    // var url = 'https://blog.csdn.net/qq_21556263/article/details/82768420'
+    // var url = 'https://www.cnblogs.com/jycboy/p/6066654.html'
     console.log(url)
     var that = this
+    wx.showLoading({
+      title: '正在加载数据'
+    })
     wx.request({
       url: url,
       data: {},
@@ -26,20 +30,57 @@ Page({
         'Content-Type': 'application/json'
       },
       success: function(res) {
-        // console.log(res.data)
-        console.log(res.data)
-        // that.setData({
-        //   detail: res.data,
-        //   richText: res.data,
-        // })
         var article = res.data;
-        let html = `<a href="/pages/logs/logs">文本内容</a><br><p class="test-class-name" style="text-align: center;" style="color: #ccc;">p 直属内容<u><i><strike color="#f00">tes<b color="#000">t</b></strike></i></u></p><p style="text-align: center;" checked width="100"><img src="https://mp.weixin.qq.com/debug/wxadoc/dev/image/cat/3.png?t=2017213" alt="image"></p><p style="text-align: center; "><b style="background-color: rgb(146, 208, 80);">&nbsp; &nbsp; 分类 &nbsp; &nbsp;&nbsp;</b></p><p style="text-align: center; "><span style="background-color: rgb(255, 255, 255);">&nbsp; <span style="color:#ff0000"><span style="font-size:10px">介</span><span style="font-size:12px">绍</span><font size="3">信</font><font size="4">息</font><font size="5">哈</font><font size="6">哈</font><font size="7">哈</font></span></span></p>`;
-
+        // 切割 按照 head，取剩下的 body 部分
+        article = article.split("</head>")[1];
+        // 公众号的适配处理
+        if (url.search('weixin') != -1) {
+          console.log('公众号')
+          article = article.split('<div class="rich_media_content " id="js_content">')[1]
+          article = article.split('</div>')[0]
+          while (article.search('data-src') != -1) {
+            article = article.replace('data-src', 'src')
+          }
+        }
+        // 简书的适配处理
+        if (url.search('jianshu') != -1) {
+          console.log('简书')
+          article = article.split('<section id="layout-default">')[1]
+          article = article.split('</section>')[0]
+          article = article.split('</header>')[1]
+          while (article.search('data-original-src') != -1) {
+            article = article.replace('data-original-src="', 'src="https:')
+          }
+        }
+        // 掘金的适配处理
+        if (url.search('juejin') != -1) {
+          console.log('掘金')
+          while (article.search('data-src') != -1) {
+            article = article.replace('data-src', 'src')
+          }
+        }
+        // CSDN 适配处理
+        if (url.search('csdn') != -1) {
+          console.log('csdn')
+          article = article.split('<div id="main">')[1]
+          while (article.search('src=\'https://csdnimg.cn/release/phoenix/write/assets/img_default.png\'') != -1) {
+            article = article.replace('src=\'https://csdnimg.cn/release/phoenix/write/assets/img_default.png\'', '')
+          }
+          while (article.search('data-src') != -1) {
+            article = article.replace('data-src', 'src')
+          }
+        }
+        // 博客园的适配处理
+        if (url.search('cnblogs') != -1) {
+          console.log('cnblogs')
+          article = article.split('<div id="topics">')[1]
+          article = article.split('</div><a name="!comments">')[0]
+        }
         wxParser.parse({
           bind: 'richText',
-          html: res.data,
+          html: article,
           target: that,
-          enablePreviewImage: false,
+          enablePreviewImage: true,
           tapLink: (url) => { // 点击超链接时的回调函数
             // url 就是 HTML 富文本中 a 标签的 href 属性值
             // 这里可以自定义点击事件逻辑，比如页面跳转
@@ -47,6 +88,13 @@ Page({
               url
             });
           }
+        })
+        wx.hideLoading()
+      },
+      fail: function() {
+        wx.hideLoading()
+        wx.showToast({
+          title: '网络请求异常',
         })
       }
     })
