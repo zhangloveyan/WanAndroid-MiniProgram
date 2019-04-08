@@ -5,35 +5,30 @@
 }
 
 .card {
-  border: 2px solid #fff;
-  border-radius: 5px;
+  border: 1px solid #d7d7d7;
+  border-radius: 4px;
   background-color: #fff;
-  box-shadow: 2px 2px 2px 2px #ccc;
+  padding: 8px;
   margin: 8px;
   position: relative;
 }
 
 .article-title {
   color: black;
-  font-size: 0.9rem;
-  margin-top: 15rpx;
-  margin-left: 5rpx;
+  font-size: 1rem;
+  margin: 15rpx;
 }
 
 .article-chapter {
   color: gray;
   font-size: 0.8rem;
-  margin-left: 20rpx;
+  margin-left: 15rpx;
+  margin-top: 100rpx;
 }
 
 .article-niceDate {
   color: gray;
-  font-size: 0.8rem;
+  font-size: 1.1rem;
   margin-left: 20rpx;
-}
-
-.article-zan {
-  color: gray;
-  padding-right: 10rpx;
-  font-size: 0.8rem;
+  margin-top: 20rpx;
 }

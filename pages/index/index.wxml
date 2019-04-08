@@ -6,7 +6,6 @@
       <text class='article-title'>{{item.title}}</text>
       <view>
         <text class='article-chapter'>分类：{{item.superChapterName}}-{{item.chapterName}}</text>
-      <text class='article-zan'>{{item.zan}}赞</text>
       </view>
     </view>
 
