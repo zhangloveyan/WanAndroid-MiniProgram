@@ -3,7 +3,9 @@ const elements = require('./elements');
 const startTagReg = /^<([-A-Za-z0-9_]+)((?:\s+[a-zA-Z_:][-a-zA-Z0-9_:.]*(?:\s*=\s*(?:(?:"[^"]*")|(?:'[^']*')|[^>\s]+))?)*)\s*(\/?)>/;
 const endTagReg = /^<\/([-A-Za-z0-9_]+)[^>]*>/;
 const attrReg = /([a-zA-Z_:][-a-zA-Z0-9_:.]*)(?:\s*=\s*(?:(?:"((?:\\.|[^"])*)")|(?:'((?:\\.|[^'])*)')|([^>\s]+)))?/g;
-
+const removeSpaceEnter = (str) => {
+  return str.replace(/\ +/g, "").replace(/[ ]/g, "").replace(/[\r\n]/g, "").replace(/[\n]/g, "").replace(/[\r]/g, "");
+};
 /**
  * 解析 HTML
  * @param {String} html    HTML 内容
@@ -16,7 +18,7 @@ const parseHtml = (html, handler) => {
   let stack = [];
   let last = html;
   // 只存放非自闭合普通标签，不存放空标签、特殊标签和自闭合标签
-  stack.last = function () {
+  stack.last = function() {
     return this[this.length - 1];
   };
 
@@ -61,14 +63,17 @@ const parseHtml = (html, handler) => {
         }
         text += index < 0 ? html : html.substring(0, index);
         html = index < 0 ? '' : html.substring(index);
-
-        if (handler.text) {
-          handler.text(text);
+        // 如果是 一堆空格 回车 换行 这些无意义的 过滤掉
+        var tempText = removeSpaceEnter(text);
+        if (tempText != null && tempText != '') {
+          if (handler.text) {
+            handler.text(text);
+          }
         }
       }
 
     } else {
-      html = html.replace(new RegExp("([\\s\\S]*?)<\/" + stack.last() + "[^>]*>"), function (all, text) {
+      html = html.replace(new RegExp("([\\s\\S]*?)<\/" + stack.last() + "[^>]*>"), function(all, text) {
         // 丢弃 special tag 内部的所有内容，包括该 special tag 的闭合标签
         return '';
       });
@@ -110,7 +115,7 @@ const parseHtml = (html, handler) => {
     if (handler.start && !elements.special[tagName]) {
       let attrs = [];
 
-      attrsStr.replace(attrReg, function (match, name, value) {
+      attrsStr.replace(attrReg, function(match, name, value) {
 
         if (elements.fillAttrs[name]) {
           value = name;

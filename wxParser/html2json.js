@@ -106,7 +106,8 @@ const html2json = (html, bindName) => {
           if (item.name === 'class') {
             node.classStr = item.value;
           }
-          if(item.name=='data-src'){
+          // 有的图片是在 data-src 中
+          if (item.name == 'data-src') {
             node.dataSrc = item.value;
           }
 
@@ -131,7 +132,7 @@ const html2json = (html, bindName) => {
         node.imgIndex = results.images.length;
         node.from = bindName;
         var imgUrl = node.attr.src;
-        if(typeof (imgUrl)=='undefined'){
+        if (typeof(imgUrl) == 'undefined' || imgUrl.search('img_default.png') != -1) {
           imgUrl = node.dataSrc;
         }
         node.attr.src = imgUrl;

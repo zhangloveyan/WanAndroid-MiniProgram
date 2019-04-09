@@ -15,8 +15,8 @@ Page({
   onLoad: function(options) {
     // https://www.jianshu.com/p/f14de0935c38
 
-    var url = options.url
-    // var url = 'https://blog.csdn.net/qq_21556263/article/details/82768420'
+    // var url = options.url
+    var url = 'https://blog.csdn.net/wanliguodu/article/details/81412951'
     // var url = 'https://www.cnblogs.com/jycboy/p/6066654.html'
     console.log(url)
     var that = this
@@ -36,8 +36,11 @@ Page({
         // 公众号的适配处理
         if (url.search('weixin') != -1) {
           console.log('公众号')
-          article = article.split('<div class="rich_media_content " id="js_content">')[1]
+          var sub = article.split('<div class="rich_media_content " id="js_content">')
+          var title = sub[0].split('<div id="img-content">')[1]
+          article = sub[1]
           article = article.split('</div>')[0]
+          article = title + article
         }
         // 简书的适配处理
         if (url.search('jianshu') != -1) {
@@ -50,25 +53,27 @@ Page({
           }
         }
         // 掘金的适配处理
-        // if (url.search('juejin') != -1) {
-        //   console.log('掘金')
-        // }
+        if (url.search('juejin') != -1) {
+          console.log('掘金')
+          article = '<article' + article.split('<article')[1]
+          article = article.split('</article>')[0] + '</article>'
+        }
         // CSDN 适配处理
         if (url.search('csdn') != -1) {
           console.log('csdn')
-          article = article.split('<div id="main">')[1]
-          // while (article.search('src=\'https://csdnimg.cn/release/phoenix/write/assets/img_default.png\'') != -1) {
-          //   article = article.replace('src=\'https://csdnimg.cn/release/phoenix/write/assets/img_default.png\'', '')
-          // }
+          article = article.split('<div id="article" class="margin_sides">')[1]
+          article = article.split('打开APP，阅读全文')[0] 
+          article = article.split('<script  type="text/javascript">')[0] + '</div></div></div>'
+
+          while (article.search('src=\'https://csdnimg.cn/release/phoenix/write/assets/img_default.png\' data-src') != -1) {
+            article = article.replace('src=\'https://csdnimg.cn/release/phoenix/write/assets/img_default.png\' data-src', 'data-src')
+          }
         }
         // 博客园的适配处理
         if (url.search('cnblogs') != -1) {
           console.log('cnblogs')
           article = article.split('<div id="topics">')[1]
           article = article.split('</div><a name="!comments">')[0]
-          // while (article.search('src') != -1) {
-          //   article = article.replace('src', 'data-src')
-          // }
         }
         wxParser.parse({
           bind: 'richText',

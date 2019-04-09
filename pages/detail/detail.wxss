@@ -2,6 +2,5 @@
 @import '../../wxParser/index.wxss';
 
 .background {
-  padding: 8px;
-  margin: 8px;
+  padding: 40rpx;
 }
