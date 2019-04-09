@@ -38,9 +38,6 @@ Page({
           console.log('公众号')
           article = article.split('<div class="rich_media_content " id="js_content">')[1]
           article = article.split('</div>')[0]
-          while (article.search('data-src') != -1) {
-            article = article.replace('data-src', 'src')
-          }
         }
         // 简书的适配处理
         if (url.search('jianshu') != -1) {
@@ -49,32 +46,29 @@ Page({
           article = article.split('</section>')[0]
           article = article.split('</header>')[1]
           while (article.search('data-original-src') != -1) {
-            article = article.replace('data-original-src="', 'src="https:')
+            article = article.replace('data-original-src="', 'data-src="https:')
           }
         }
         // 掘金的适配处理
-        if (url.search('juejin') != -1) {
-          console.log('掘金')
-          while (article.search('data-src') != -1) {
-            article = article.replace('data-src', 'src')
-          }
-        }
+        // if (url.search('juejin') != -1) {
+        //   console.log('掘金')
+        // }
         // CSDN 适配处理
         if (url.search('csdn') != -1) {
           console.log('csdn')
           article = article.split('<div id="main">')[1]
-          while (article.search('src=\'https://csdnimg.cn/release/phoenix/write/assets/img_default.png\'') != -1) {
-            article = article.replace('src=\'https://csdnimg.cn/release/phoenix/write/assets/img_default.png\'', '')
-          }
-          while (article.search('data-src') != -1) {
-            article = article.replace('data-src', 'src')
-          }
+          // while (article.search('src=\'https://csdnimg.cn/release/phoenix/write/assets/img_default.png\'') != -1) {
+          //   article = article.replace('src=\'https://csdnimg.cn/release/phoenix/write/assets/img_default.png\'', '')
+          // }
         }
         // 博客园的适配处理
         if (url.search('cnblogs') != -1) {
           console.log('cnblogs')
           article = article.split('<div id="topics">')[1]
           article = article.split('</div><a name="!comments">')[0]
+          // while (article.search('src') != -1) {
+          //   article = article.replace('src', 'data-src')
+          // }
         }
         wxParser.parse({
           bind: 'richText',

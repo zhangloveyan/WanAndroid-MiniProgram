@@ -5,7 +5,8 @@ const app = getApp()
 Page({
   data: {
     articleList: [],
-    pageNum: 0
+    pageNum: 0,
+    condition: []
   },
   onLoad: function() {
     this.loadArticleList()
@@ -24,17 +25,27 @@ Page({
       success: function(res) {
         console.log(res.data);
         var localList = [];
+        var list = [];
         if (that.data.pageNum == 0) {
           localList = res.data.data.datas;
         } else {
           localList = that.data.articleList.concat(res.data.data.datas);
         }
+        list[0] = true;
+        for (let i = 1; i < localList.length; i++) {
+          if (localList[i].niceDate != localList[i - 1].niceDate) {
+            list[i] = true;
+          } else {
+            list[i] = false;
+          }
+        }
         that.setData({
-          articleList: localList
+          articleList: localList,
+          condition: list
         })
         wx.hideLoading()
       },
-      fail:function(){
+      fail: function() {
         wx.showToast({
           title: '网络请求异常',
         })

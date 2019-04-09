@@ -22,7 +22,7 @@ const removeDOCTYPE = (str) => {
  */
 const html2json = (html, bindName) => {
   html = removeDOCTYPE(html);
-  
+
   // 节点缓冲区，与 htmlparser.js 中的 stack 对应，只存储非自闭和标签
   // 比如 <span></span>，而非 <img src="#"> 等
   let bufferNodes = [];
@@ -71,7 +71,7 @@ const html2json = (html, bindName) => {
      * @param  {Array}  attrs     属性
      * @param  {Boolean} isUnary  是否是自闭合标签
      */
-    start: function (tag, attrs, isUnary) {
+    start: function(tag, attrs, isUnary) {
       let node = {
         node: 'element',
         tag: tag
@@ -106,6 +106,9 @@ const html2json = (html, bindName) => {
           if (item.name === 'class') {
             node.classStr = item.value;
           }
+          if(item.name=='data-src'){
+            node.dataSrc = item.value;
+          }
 
           node.attr[item.name] = item.value; // 重复的属性，后面的会覆盖前面的
         });
@@ -127,7 +130,11 @@ const html2json = (html, bindName) => {
       if (node.tag === 'img') {
         node.imgIndex = results.images.length;
         node.from = bindName;
-
+        var imgUrl = node.attr.src;
+        if(typeof (imgUrl)=='undefined'){
+          imgUrl = node.dataSrc;
+        }
+        node.attr.src = imgUrl;
         results.images.push(node);
         results.imageUrls.push(node.attr.src);
       }
@@ -145,11 +152,11 @@ const html2json = (html, bindName) => {
       if (node.tag === 'audio') {
         let params = node.attr['data-extra']
         if (params) {
-           params = params.replace(new RegExp('&quot;', 'g'), '"');
-           params = JSON.parse(params)
-           node.attr.poster = params.poster
-           node.attr.name = params.name
-           node.attr.author = params.author
+          params = params.replace(new RegExp('&quot;', 'g'), '"');
+          params = JSON.parse(params)
+          node.attr.poster = params.poster
+          node.attr.name = params.name
+          node.attr.author = params.author
         }
       }
 
@@ -166,7 +173,7 @@ const html2json = (html, bindName) => {
      * 处理关闭标签
      * @param  {String} tag 标签名称
      */
-    end: function (tag) {
+    end: function(tag) {
       let node = bufferNodes.shift(); // 取出缓冲区的第一个的未关闭标签，也就是与该结束标签对应的标签
 
       if (node.tag !== tag) {
@@ -198,7 +205,7 @@ const html2json = (html, bindName) => {
      * 处理文本内容
      * @param  {String} text 文本字符串
      */
-    text: function (text) {
+    text: function(text) {
       let node = {
         node: 'text',
         text: codeTransformation.transform(text),
@@ -210,7 +217,7 @@ const html2json = (html, bindName) => {
      * 处理评论内容
      * @param  {String} content 注释内容
      */
-    comment: function (content) {},
+    comment: function(content) {},
   });
 
   return results;

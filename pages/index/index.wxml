@@ -1,13 +1,16 @@
 <!--index.wxml-->
 <scroll-view class='article-scroll'>
   <block wx:for="{{articleList}}" wx:key="{{index}}">
-    <text class='article-niceDate'>{{item.niceDate}}</text>
-    <view class='card' data-data="{{item}}" bindtap='articleClick' >
-      <text class='article-title'>{{item.title}}</text>
+    <text wx:if="{{condition[index]}}" class='article-niceDate'>{{item.niceDate}}</text>
+    <view class='card' data-data="{{item}}" bindtap='articleClick'>
       <view>
-        <text class='article-chapter'>分类：{{item.superChapterName}}-{{item.chapterName}}</text>
+        <text class='article-title' wx:if="{{item.fresh}}">新</text>
+        <text class='article-title'>{{item.title}}</text>
+      </view>
+      <view>
+        <text class='article-chapter'>作者：{{item.author}}</text>
+        <text class='article-chapter'>分类：{{item.superChapterName}}/{{item.chapterName}}</text>
       </view>
     </view>
-
   </block>
 </scroll-view>
