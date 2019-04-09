@@ -15,8 +15,8 @@ Page({
   onLoad: function(options) {
     // https://www.jianshu.com/p/f14de0935c38
 
-    // var url = options.url
-    var url = 'https://blog.csdn.net/wanliguodu/article/details/81412951'
+    var url = options.url
+    // var url = 'https://blog.csdn.net/wanliguodu/article/details/81412951'
     // var url = 'https://www.cnblogs.com/jycboy/p/6066654.html'
     console.log(url)
     var that = this
