@@ -75,6 +75,12 @@ Page({
           article = article.split('<div id="topics">')[1]
           article = article.split('</div><a name="!comments">')[0]
         }
+        // wanAndroid的适配处理
+        if (url.search('wanandroid') != -1) {
+          console.log('wanandroid')
+          article = article.split('<div class="main_content_l">')[1]
+          article = article.split('<div class="fixed_content_r fixedBlock">')[0]
+        }
         wxParser.parse({
           bind: 'richText',
           html: article,
